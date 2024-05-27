@@ -16,7 +16,6 @@ The project presents a Kafka-based data processing architecture tailored for man
 * macOS
 * Helm 
 
-</br>
 
 # Deploying a Bitnami Kafka cluster with three brokers.
 
@@ -26,8 +25,16 @@ We will install Kafka using a Helm chart. First, add the Bitnami repository to y
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
-Next, deploy a Bitnami Kafka cluster with three brokers (the default configuration for the Bitnami/Kafka chart) by running the following command:
+Next, deploy a Bitnami Kafka cluster with three brokers in the `default` namespace (the default configuration for the Bitnami/Kafka chart) by running the following command:
 
 ```
 helm install cluster-kafka bitnami/kafka
 ```
+
+After installation, detailed instructions and essential information regarding the deployment and configuration of the Kafka cluster will be displayed. Be sure to save this information, as it will be necessary for accessing Kafka. You can also experiment with a pod consumer or producer to verify that the cluster is up and running. </br>
+Here's an example of what the detailed instructions and essential information may look like:
+
+
+
+
+The highlighted parts will be stored in a `configMap` and a `secret`. Through the `configMap` resource, applications (including the two consumers and the Python web server) will be guided on connecting to the Kafka cluster. Meanwhile, the `secret` resource ensures secure authentication between applications (clients) and brokers using the SCRAM-SHA-256 mechanism with the specified username and password
