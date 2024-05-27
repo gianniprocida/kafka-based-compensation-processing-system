@@ -17,3 +17,15 @@ The project presents a Kafka-based data processing architecture tailored for man
 * Helm 
 
 # Deploying a Bitnami Kafka cluster with three brokers.
+
+We will install Kafka using a Helm chart. First, add the Bitnami repository to your local Helm configuration:
+
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+Next, deploy a Bitnami Kafka cluster with three brokers (the default configuration for the Bitnami/Kafka chart) by running the following command:
+
+```
+helm install cluster-kafka bitnami/kafka
+```
