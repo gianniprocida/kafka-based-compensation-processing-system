@@ -6,6 +6,14 @@ The project presents a Kafka-based data processing architecture tailored for man
 
 2. Configuring a Python-based web server to expose endpoints for JSON data submission via HTTP POST requests, enabling seamless integration with Kafka topics.
 
-3. Implementing Two consumers operating in separate groups to analyze the data, generate JSON outputs, and computw employee compensation.
+3. Implementing Two consumers operating in separate groups to analyze the data, generate JSON outputs, and compute employee compensation.
 
 4. Deploying a client pod specifically for sending POST requests to the Python-based web server. 
+
+
+## Prerequisites 
+* Docker Desktop
+* macOS
+* Helm 
+
+# Deploying a Bitnami Kafka cluster with three brokers.
