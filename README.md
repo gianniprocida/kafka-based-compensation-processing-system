@@ -16,6 +16,8 @@ The project presents a Kafka-based data processing architecture tailored for man
 * macOS
 * Helm 
 
+</br>
+
 # Deploying a Bitnami Kafka cluster with three brokers.
 
 We will install Kafka using a Helm chart. First, add the Bitnami repository to your local Helm configuration:
