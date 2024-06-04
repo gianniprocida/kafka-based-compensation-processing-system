@@ -25,7 +25,7 @@ We will install Kafka using a Helm chart. First, add the Bitnami repository to y
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
-Next, deploy a Bitnami Kafka cluster with three brokers in the `default` namespace (the default configuration for the Bitnami/Kafka chart) by running the following command:
+Next, deploy a Bitnami Kafka cluster with three brokers in the `default` namespace by running the following command:
 
 ```
 helm install cluster-kafka bitnami/kafka
@@ -34,6 +34,7 @@ helm install cluster-kafka bitnami/kafka
 After installation, detailed instructions and essential information regarding the deployment and configuration of the Kafka cluster will be displayed. Be sure to save this information, as it will be necessary for accessing Kafka. You can also experiment with a pod consumer or producer to verify that the cluster is up and running. </br>
 Here's an example of what the detailed instructions and essential information may look like:
 
+![info](dns-names-and-conf.png)
 
 
 
