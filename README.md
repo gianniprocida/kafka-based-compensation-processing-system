@@ -1,12 +1,12 @@
 # kafka-based-compensation-processing-system
 ## Overview 
-The project presents a Kafka-based data processing architecture tailored for managing compensation rates and employee records. Leveraging Kafka for streamlined data processing, it centralizes storage and enhances data ingestion efficiency. The setup includes: 
+The project presents a Kafka-based data processing architecture tailored for managing compensation rates and employee records. For more details, please refer to the file `6G-Assessment-Application.pdf`. The setup includes: 
 
 1. Deploying a Bitnami Kafka cluster with three brokers.
 
 2. Configuring a Python-based web server to expose endpoints for JSON data submission via HTTP POST requests, enabling seamless integration with Kafka topics.
 
-3. Implementing Two consumers operating in separate groups to analyze the data, generate JSON outputs, and compute employee compensation.
+3. Implementing two consumers operating in separate groups to analyze the data, generate JSON outputs, and compute employee compensation.
 
 4. Deploying a client pod specifically for sending POST requests to the Python-based web server. 
 
@@ -38,4 +38,33 @@ Here's an example of what the detailed instructions and essential information ma
 
 
 
-The highlighted parts will be stored in a `configMap` and a `secret`. Through the `configMap` resource, applications (including the two consumers and the Python web server) will be guided on connecting to the Kafka cluster. Meanwhile, the `secret` resource ensures secure authentication between applications (clients) and brokers using the SCRAM-SHA-256 mechanism with the specified username and password
+The highlighted parts will be stored in a `configMap` and a `secret`. Through the `configMap` resource, applications (including the two consumers and the Python web server) will be guided on connecting to the Kafka cluster. Meanwhile, the `secret` resource ensures secure authentication between applications (clients) and brokers using the SCRAM-SHA-256 mechanism with the specified username and password. </br>
+
+Each time a Kafka cluster is installed, a new user password is required to access the cluster. The following instructions explain how to extract, encode, and update the password in the `secret` resource. </br>
+First, retrieve the Kafka user password from the Kubernetes secret named `cluster-kafka-user-passwords`:
+
+```
+password="$(kubectl get secret cluster-kafka-user-passwords --namespace default -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
+```
+
+Next, encode the extracted password using base64:
+
+```
+encoded_password=$(echo -n $password | base64)
+
+```
+
+Create or update the `kafka-cred` secret with the newly encoded password. 
+
+```
+cat <<EOF > kafka-cred.yaml
+apiVersion: v1
+data:
+  password: $encoded_password
+  user: user1
+kind: Secret
+metadata:
+  name: kafka-cred
+type: Opaque
+EOF
+```
