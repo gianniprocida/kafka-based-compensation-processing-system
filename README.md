@@ -98,11 +98,14 @@ Navigate to the `webservice` directory and run the following command to build a 
 docker build -t webservice .
 ```
 
-The webservice application is a Python-based web server designed to interact with Apache Kafka. The server performs the following key functions:
+The webservice application is a Python-based web server designed to interact with the Kafka cluster just deployed. The web server performs the following key functions:
 
 1. Topic Creation: On startup, the web server creates two Kafka topics: `employee` and `compensation_rates`. These topics are used to ingest data into the Kafka system.
 
-2. Endpoints: The web server exposes several HTTP endpoints for data submission. Each endpoint is designed to handle JSON-formatted data and publish it to the corresponding Kafka topic. For instance, to submit data to the `employee` topic you will need to hit the following endpoint 'http://<web-server-ip>:<port>/api/employee'. To submit data to the `compensation_rates` topic, you will need to hit the following endpoint 'http://<web-server-ip>:<port>/api/compensation' will submit data to the `compensation_rates` topic.
+2. Endpoints: The web server exposes two HTTP endpoints for data submission. Each endpoint is designed to handle JSON-formatted data and publish it to the corresponding Kafka topic. For instance:
+
+* To submit data to the `employee` topic, you will need to hit the following endpoint: http://<web-server-ip>:<port>/api/employee.
+* To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://<web-server-ip>:<port>/api/compensation.
 
 
 
@@ -112,3 +115,15 @@ Navigate to the `consumer-compensation` directory and run the following command 
 ```
 docker build -t compensation-rates-consumer .
 ```
+
+This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container and volumes.
+This consumer will be part of the consumer group called `compensation.grp-1` because we want to separate the two flow of data coming from two diffent topics namely `compensation` and `employee.` ee the `myapp.yaml` file for more info.
+
+
+Navigate to the `calculator` directory and run the following command to build a Docker image named `calculator` using the Dockerfile in the current directory:
+
+```
+docker build -t calculator .
+```
+
+This docker image contains the instruction to run a different consumer. The two consumers will part of two different con
