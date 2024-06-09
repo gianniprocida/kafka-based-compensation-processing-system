@@ -68,3 +68,47 @@ metadata:
 type: Opaque
 EOF
 ```
+
+
+Now, create the `kafka-settings` configmap: 
+
+
+```
+apiVersion: v1
+data:
+  BOOTSTRAP_SERVERS: cluster-kafka-controller-0.cluster-kafka-controller-headless.default.svc.cluster.local:9092,cluster-kafka-controller-1.cluster-kafka-controller-headless.default.svc.cluster.local:9092,cluster-kafka-controller-2.cluster-kafka-controller-headless.default.svc.cluster.local:9092
+  PARTITIONS_EMPLOYEE: "2"
+  REPLICAS_EMPLOYEE: "2"
+  TOPIC_EMPLOYEE: "employee"
+  TOPIC_COMPENSATION: "compensation_rates"
+  PARTITIONS_COMPENSATION: "2"
+  REPLICAS_COMPENSATION: "2"
+  CONSUMER_GROUP_EMPLOYEE: "employee.grp-0"
+  CONSUMER_GROUP_COMPENSATION: "compensation.grp-1"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: kafka-settings
+
+```
+
+Navigate to the `webservice` directory and run the following command to build a Docker image named webservice using the Dockerfile in the current directory:
+
+```
+docker build -t webservice .
+```
+
+The webservice application is a Python-based web server designed to interact with Apache Kafka. The server performs the following key functions:
+
+1. Topic Creation: On startup, the web server creates two Kafka topics: `employee` and `compensation_rates`. These topics are used to ingest data into the Kafka system.
+
+2. Endpoints: The web server exposes several HTTP endpoints for data submission. Each endpoint is designed to handle JSON-formatted data and publish it to the corresponding Kafka topic. For instance, to submit data to the `employee` topic you will need to hit the following endpoint 'http://<web-server-ip>:<port>/api/employee'. To submit data to the `compensation_rates` topic, you will need to hit the following endpoint 'http://<web-server-ip>:<port>/api/compensation' will submit data to the `compensation_rates` topic.
+
+
+
+Navigate to the `consumer-compensation` directory and run the following command to build a Docker image named `consumer-compensation` using the Dockerfile in the current directory:
+
+
+```
+docker build -t compensation-rates-consumer .
+```
