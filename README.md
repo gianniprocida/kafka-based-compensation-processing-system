@@ -104,8 +104,8 @@ The webservice application is a Python-based web server designed to interact wit
 
 2. Endpoints: The web server exposes two HTTP endpoints for data submission. Each endpoint is designed to handle JSON-formatted data and publish it to the corresponding Kafka topic. For instance:
 
-* To submit data to the `employee` topic, you will need to hit the following endpoint: http://<web-server-ip>:<port>/api/employee.
-* To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://<web-server-ip>:<port>/api/compensation.
+* To submit data to the `employee` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/employee.
+* To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/compensation.
 
 
 
