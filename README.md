@@ -146,14 +146,14 @@ kubectl apply -f py-httpie-pod.yaml
 
 * To submit data to the `employee` topic, log in to the pod `py-httpie` pod and use the following command:
 ```
-http post 10.1.0.22:8088/api/employee
+http post <web-service-ip>:8088/api/employee
 ```
 * To submit data to the `compensation` topic, log in to the pod `py-httpie` pod and use the following command:
 ```
-http post 10.1.0.22:8088/api/compensation
+http post <web-service-ip>:8088/api/compensation
 ```
-
-Check the lof of the `webservice` pod and look for 201 response. that would mean that the messagess were successfully published to the topic.
+Replace <web-service-ip> with the IP address of the webservice pod.
+Check the logs of the `webservice` pod and look for a 201 response to confirm that the messages were successfully published to the topic.
 
 ## Run the consumer-compensation pod
 
