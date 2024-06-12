@@ -92,11 +92,17 @@ metadata:
 
 ```
 
+
+# Run the webservice pod
+
+
 Navigate to the `webservice` directory and run the following command to build a Docker image named webservice using the Dockerfile in the current directory:
 
 ```
 docker build -t webservice .
 ```
+
+Apply the `webserver.yaml` file to run the pod using the webservice image.
 
 The webservice application is a Python-based web server designed to interact with the Kafka cluster just deployed. The web server performs the following key functions:
 
@@ -108,6 +114,33 @@ The webservice application is a Python-based web server designed to interact wit
 * To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/compensation.
 
 
+# Run the py-httpie pod
+
+This pod will be used to send HTTP POST requests to submit data to the Kafka topics.</br>
+Navigate to the `api-client` directory and run the following command to build a Docker image named ` py-httpie`:
+
+```
+docker build -t py-httpie .
+```
+
+Apply the file `py-httpie-pod.yaml` file to run the pod using the py-httpie image:
+
+```
+kubectl apply -f py-httpie-pod.yaml
+```
+
+* To submit data to the `employee` topic, use the following command:
+```
+HTTP POST <ip-address-pod>:8088/api/compensation
+```
+* To submit data to the `compensation` topic, use the following command:
+```
+HTTP POST <ip-address-pod>:8088/api/compensation
+```
+
+
+# Run the consumer-compensation pod
+
 
 Navigate to the `consumer-compensation` directory and run the following command to build a Docker image named `consumer-compensation` using the Dockerfile in the current directory:
 
@@ -116,9 +149,10 @@ Navigate to the `consumer-compensation` directory and run the following command 
 docker build -t compensation-rates-consumer .
 ```
 
-This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container and volumes.
-This consumer will be part of the consumer group called `compensation.grp-1` because we want to separate the two flow of data coming from two diffent topics namely `compensation` and `employee.` ee the `myapp.yaml` file for more info.
+This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container setup and shared volumes. This consumer will be part of the consumer group called `compensation.grp-1` 
 
+
+# Build 
 
 Navigate to the `calculator` directory and run the following command to build a Docker image named `calculator` using the Dockerfile in the current directory:
 
@@ -126,4 +160,7 @@ Navigate to the `calculator` directory and run the following command to build a 
 docker build -t calculator .
 ```
 
-This docker image contains the instruction to run a different consumer. The two consumers will part of two different con
+ This docker image contains the instruction to run a consumer that reads data from the json file created by the previous consumer, and calculates the compensation for each employee stored in the `employee` topic
+
+
+ The two consumers will be part of two different con because we want to separate the two flow of data coming from two diffent topics namely `compensation` and `employee.` See the `myapp.yaml` file for more info.
