@@ -54,14 +54,21 @@ encoded_password=$(echo -n $password | base64)
 
 ```
 
-Create or update the `kafka-cred` secret with the newly encoded password. 
+Encode the value of the variable `user` using base64:
+
+```
+user=user1
+echo -n $user | base64
+```
+
+Create or update the `kafka-cred` secret with the newly encoded user credentials. 
 
 ```
 cat <<EOF > kafka-cred.yaml
 apiVersion: v1
 data:
   password: $encoded_password
-  user: user1
+  user: dXNlcjE=
 kind: Secret
 metadata:
   name: kafka-cred
@@ -69,7 +76,7 @@ type: Opaque
 EOF
 ```
 
-
+The `user` field in the secret contains the base64-encoded value of the user variable while the `password` field contains the base64-encoded value of the password variable.</br>
 Now, create the `kafka-settings` configmap: 
 
 
@@ -125,7 +132,7 @@ This pod will be used to send HTTP POST requests to submit data to the Kafka top
 Navigate to the `api-client` directory and run the following command to build a Docker image named ` py-httpie`:
 
 ```
-docker build -t py-httpie .
+docker build -f dockerfile-http -t py-httpie .
 ```
 
 Apply the file `py-httpie-pod.yaml` file to run the pod using the py-httpie image:
@@ -134,15 +141,16 @@ Apply the file `py-httpie-pod.yaml` file to run the pod using the py-httpie imag
 kubectl apply -f py-httpie-pod.yaml
 ```
 
-* To submit data to the `employee` topic, use the following command:
+* To submit data to the `employee` topic, log in to the pod `py-httpie` pod and use the following command:
 ```
-HTTP POST <ip-address-webservice-pod>:8088/api/compensation
+http post 10.1.0.22:8088/api/employee
 ```
-* To submit data to the `compensation` topic, use the following command:
+* To submit data to the `compensation` topic, log in to the pod `py-httpie` pod and use the following command:
 ```
-HTTP POST <ip-address-webservice-pod>:8088/api/compensation
+http post 10.1.0.22:8088/api/compensation
 ```
 
+Check the lof of the `webservice` pod and look for 201 response. that would mean that the messagess were successfully published to the topic.
 
 ## Run the consumer-compensation pod
 
