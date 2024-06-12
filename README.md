@@ -115,7 +115,12 @@ Navigate to the `webservice` directory and run the following command to build a 
 docker build -t webservice .
 ```
 
-Apply the `webserver.yaml` file to run the pod using the webservice image.
+Create the pod using the webservice image:
+
+```
+kubectl apply -f webservice.yaml
+```
+
 
 The webservice application is a Python-based web server designed to interact with the Kafka cluster just deployed. The web server performs the following key functions:
 
@@ -152,7 +157,7 @@ http post <web-service-ip>:8088/api/employee
 ```
 http post <web-service-ip>:8088/api/compensation
 ```
-Replace <web-service-ip> with the IP address of the webservice pod.
+Replace `<web-service-ip>` with the IP address of the webservice pod.
 Check the logs of the `webservice` pod and look for a 201 response to confirm that the messages were successfully published to the topic.
 
 ## Run the consumer-compensation pod
