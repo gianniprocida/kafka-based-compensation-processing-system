@@ -76,7 +76,7 @@ type: Opaque
 EOF
 ```
 
-The `user` field in the secret contains the base64-encoded value of the user variable while the `password` field contains the base64-encoded value of the password variable.</br>
+The `user` field in the secret contains the base64-encoded value of the user variable and the `password` field contains the base64-encoded value of the password variable.</br>
 Now, create the `kafka-settings` configmap: 
 
 
@@ -99,8 +99,14 @@ metadata:
 
 ```
 
+Apply both resources using the following command:
+```
+kubectl apply -f kafka-cred.yaml -f kafka-settings.yaml
+```
 
-# Run the webservice pod
+# Building Docker Images and Running Pods
+
+## Run the webservice pod
 
 
 Navigate to the `webservice` directory and run the following command to build a Docker image named webservice using the Dockerfile in the current directory:
@@ -119,9 +125,6 @@ The webservice application is a Python-based web server designed to interact wit
 
 * To submit data to the `employee` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/employee.
 * To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/compensation.
-
-
-# Building Docker Images and Running Pods
 
 
 
