@@ -143,7 +143,7 @@ Navigate to the `api-client` directory and run the following command to build a 
 docker build -f dockerfile-http -t py-httpie .
 ```
 
-Apply the file `py-httpie-pod.yaml` file to run the pod using the py-httpie image:
+Apply the `py-httpie-pod.yaml` file to run the pod using the py-httpie image:
 
 ```
 kubectl apply -f py-httpie-pod.yaml
@@ -170,7 +170,7 @@ Navigate to the `consumer-compensation` directory and run the following command 
 docker build -t compensation-rates-consumer .
 ```
 
-This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container setup and shared volumes. This consumer will be part of the consumer group called `compensation.grp-1` 
+This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container setup and shared volumes. This consumer will be part of the consumer group called `compensation.grp-1`. This configuration is stored in the `kafka-settings.yaml` file.
 
 
 ## Run the consumer-compensation pod
@@ -181,7 +181,7 @@ Navigate to the `calculator` directory and run the following command to build a 
 docker build -t calculator .
 ```
 
- This docker image contains the instruction to run a consumer that reads data from the json file created by the previous consumer, and calculates the compensation for each employee stored in the `employee` topic
+ This docker image contains the instruction to run a consumer that reads data from the json file created by the previous consumer, and calculates the compensation for each employee stored in the `employee` topic.  This consumer will be part of the consumer group called `compensation.grp-1`.  This configuration is stored in the `kafka-settings.yaml` file.
 
 
  The two consumers will be part of two different con because we want to separate the two flow of data coming from two diffent topics namely `compensation` and `employee.` See the `myapp.yaml` file for more info.
