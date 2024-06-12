@@ -114,7 +114,12 @@ The webservice application is a Python-based web server designed to interact wit
 * To submit data to the `compensation_rates` topic, you will need to hit the following endpoint: http://web-server-ip:port/api/compensation.
 
 
-# Run the py-httpie pod
+# Building Docker Images and Running Pods
+
+
+
+
+## Run the py-httpie pod
 
 This pod will be used to send HTTP POST requests to submit data to the Kafka topics.</br>
 Navigate to the `api-client` directory and run the following command to build a Docker image named ` py-httpie`:
@@ -131,15 +136,15 @@ kubectl apply -f py-httpie-pod.yaml
 
 * To submit data to the `employee` topic, use the following command:
 ```
-HTTP POST <ip-address-pod>:8088/api/compensation
+HTTP POST <ip-address-webservice-pod>:8088/api/compensation
 ```
 * To submit data to the `compensation` topic, use the following command:
 ```
-HTTP POST <ip-address-pod>:8088/api/compensation
+HTTP POST <ip-address-webservice-pod>:8088/api/compensation
 ```
 
 
-# Run the consumer-compensation pod
+## Run the consumer-compensation pod
 
 
 Navigate to the `consumer-compensation` directory and run the following command to build a Docker image named `consumer-compensation` using the Dockerfile in the current directory:
@@ -152,7 +157,7 @@ docker build -t compensation-rates-consumer .
 This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container setup and shared volumes. This consumer will be part of the consumer group called `compensation.grp-1` 
 
 
-# Build 
+## Run the consumer-compensation pod
 
 Navigate to the `calculator` directory and run the following command to build a Docker image named `calculator` using the Dockerfile in the current directory:
 
