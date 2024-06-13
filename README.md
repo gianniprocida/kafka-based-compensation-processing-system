@@ -160,10 +160,10 @@ http post <web-service-ip>:8088/api/compensation
 Replace `<web-service-ip>` with the IP address of the webservice pod.
 Check the logs of the `webservice` pod and look for a 201 response to confirm that the messages were successfully published to the topic.
 
-## Run the consumer-compensation pod
+## Run the compensation-rates-consumer pod
 
 
-Navigate to the `consumer-compensation` directory and run the following command to build a Docker image named `consumer-compensation` using the Dockerfile in the current directory:
+Navigate to the `compensation-rates-consumer` directory and run the following command to build a Docker image named `compensation-rates-consumer` using the Dockerfile in the current directory:
 
 
 ```
@@ -173,15 +173,60 @@ docker build -t compensation-rates-consumer .
 This docker image contains the instruction to run a consumer that reads messages from the `compensation` topic and writes each message to a file (shared/data.json). Those data will be made available to the other consumer using this multi-container setup and shared volumes. This consumer will be part of the consumer group called `compensation.grp-1`. This configuration is stored in the `kafka-settings.yaml` file.
 
 
-## Run the consumer-compensation pod
+## Run the employee-consumer pod
 
-Navigate to the `calculator` directory and run the following command to build a Docker image named `calculator` using the Dockerfile in the current directory:
+Navigate to the `employee` directory and run the following command to build a Docker image named `employee` using the Dockerfile in the current directory:
 
 ```
-docker build -t calculator .
+docker build -t employee-consumer .
 ```
 
- This docker image contains the instruction to run a consumer that reads data from the json file created by the previous consumer, and calculates the compensation for each employee stored in the `employee` topic.  This consumer will be part of the consumer group called `compensation.grp-1`.  This configuration is stored in the `kafka-settings.yaml` file.
+ This docker image contains the instruction to run a consumer that reads data from the json file created by the `compensation-rates-consumer` pod, and calculates the compensation for each employee stored in the `employee` topic.  This consumer will be part of the consumer group called `compensation.grp-1`.  This configuration is stored in the `kafka-settings.yaml` file.
+
+The two consumers will be part of two different consumer groups because we want to separate the two data flows coming from the two different topics, namely compensation and employee. See the `myapp.yaml` file for more information on this configuration.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: myapp
+  name: myapp
+  namespace: default
+spec:
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+  - name: final-data
+    emptyDir: {}
+
+  containers:
+  - name: compensation-rates-consumer
+    image: compensation-rates-consumer
+    imagePullPolicy: Never
+    envFrom:
+      - configMapRef:
+          name: kafka-settings
+      - secretRef:
+          name: kafka-cred
+    volumeMounts:
+    - name: shared-data
+      mountPath: /opt/shared
+  - name: compensation-calculator
+    image: compensation-calculator
+    imagePullPolicy: Never
+    envFrom:
+      - configMapRef:
+          name: kafka-settings
+      - secretRef:
+          name: kafka-cred
+    volumeMounts:
+      - name: shared-data
+        mountPath: /shared
+      - name: final-data 
+        mountPath: /opt/data
+```
 
 
- The two consumers will be part of two different con because we want to separate the two flow of data coming from two diffent topics namely `compensation` and `employee.` See the `myapp.yaml` file for more info.
+To summarize, the application consists of six pods: three dedicated to the Kafka cluster, one allocated for the FastAPI web server, one multi-container pod housing the consumers, and one designated for handling client HTTP requests. This approach embodies a component-based architecture, where individual components are tasked with distinct functions.
