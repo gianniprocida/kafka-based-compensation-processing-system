@@ -19,6 +19,7 @@ The project presents a Kafka-based data processing architecture tailored for man
 
 # Deploying a Bitnami Kafka cluster with three brokers.
 
+Ensure you delete any persistent volume claims (PVCs) or persistent volumes (PVs) from any previous Helm release of bitnami/kafka to avoid conflicts.
 We will install Kafka using a Helm chart. First, add the Bitnami repository to your local Helm configuration:
 
 ```
@@ -175,7 +176,7 @@ This docker image contains the instruction to run a consumer that reads messages
 
 ## Run the employee-consumer pod
 
-Navigate to the `employee` directory and run the following command to build a Docker image named `employee` using the Dockerfile in the current directory:
+Navigate to the `employee-consumer` directory and run the following command to build a Docker image named `employee` using the Dockerfile in the current directory:
 
 ```
 docker build -t employee-consumer .
@@ -229,4 +230,4 @@ spec:
 ```
 
 
-To summarize, the application consists of six pods: three dedicated to the Kafka cluster, one allocated for the FastAPI web server, one multi-container pod housing the consumers, and one designated for handling client HTTP requests. This approach embodies a component-based architecture, where individual components are tasked with distinct functions.
+To summarize, the application consists of six pods: three dedicated to the Kafka cluster, one allocated for the FastAPI web server, one multi-container pod housing the consumers, and one designated for sending client HTTP requests. This approach embodies a component-based architecture, where individual components are tasked with distinct functions.
