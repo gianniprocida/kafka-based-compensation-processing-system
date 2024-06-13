@@ -55,10 +55,15 @@ encoded_password=$(echo -n $password | base64)
 
 ```
 
-Encode the value of the variable `user` using base64:
+Assign the value "user1" to the variable named user.
 
 ```
 user=user1
+```
+
+Encode the value of the variable `user` using base64:
+
+```
 echo -n $user | base64
 ```
 
