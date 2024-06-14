@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: py-httpie
+  name: py-httpie
+  namespace: default
+spec:
+  containers:
+  - image: py-httpie
+    name: py-httpie
+    imagePullPolicy: Never
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

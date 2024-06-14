@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: myapp
+  name: myapp
+  namespace: default
+spec:
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+  - name: final-data
+    emptyDir: {}
+
+  containers:
+  - name: compensation-rates-consumer
+    image: compensation-rates-consumer
+    imagePullPolicy: Never
+    envFrom:
+      - configMapRef:
+          name: kafka-settings
+      - secretRef:
+          name: kafka-cred
+    volumeMounts:
+    - name: shared-data
+      mountPath: /opt/shared
+  - name: employee-consumer
+    image: employee-consumer
+    imagePullPolicy: Never
+    envFrom:
+      - configMapRef:
+          name: kafka-settings
+      - secretRef:
+          name: kafka-cred
+    volumeMounts:
+      - name: shared-data
+        mountPath: /shared
+      - name: final-data 
+        mountPath: /opt/data
+ 
+  

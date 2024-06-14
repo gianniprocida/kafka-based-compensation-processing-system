@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  BOOTSTRAP_SERVERS: cluster-kafka-controller-0.cluster-kafka-controller-headless.default.svc.cluster.local:9092,cluster-kafka-controller-1.cluster-kafka-controller-headless.default.svc.cluster.local:9092,cluster-kafka-controller-2.cluster-kafka-controller-headless.default.svc.cluster.local:9092
+  PARTITIONS_EMPLOYEE: "2"
+  REPLICAS_EMPLOYEE: "2"
+  TOPIC_EMPLOYEE: "employee"
+  TOPIC_COMPENSATION: "compensation_rates"
+  PARTITIONS_COMPENSATION: "2"
+  REPLICAS_COMPENSATION: "2"
+  CONSUMER_GROUP_EMPLOYEE: "employee.grp-0"
+  CONSUMER_GROUP_COMPENSATION: "compensation.grp-1"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: kafka-settings
